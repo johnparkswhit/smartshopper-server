@@ -15,7 +15,7 @@ router.post('/register', function(req,res){
         passwordhash: bcrypt.hashSync(pass, 10) 
     }).then(
         function createSuccess(user){
-            var token = jwt.sign({id:user.id}, process.env.JWT_SECRET, {expiresIn: 60*60*24})
+            var token = jwt.sign({id:user.id}, process.env.JWT_SECRET, {expiresIn: 60*60*24});            
             res.json({
                 user: user,
                 message: 'created',
@@ -28,7 +28,8 @@ router.post('/register', function(req,res){
     )
 })
 
-router.post('/login', function(req,res){
+//router.post('/login', function(req,res){
+router.post('/authenticate', function(req,res){
     User.findOne({where:{username:req.body.username}}) 
     .then(
         function(user) {
@@ -36,6 +37,7 @@ router.post('/login', function(req,res){
                 bcrypt.compare(req.body.password, user.passwordhash, function (err, matches){
                     if (matches){
                         var token = jwt.sign({id:user.id}, process.env.JWT_SECRET, {expiresIn: 60*60*24});
+                        //var token = 'fake-token';
                         res.json({
                             user: user,
                             message: "successfully authenticated",
