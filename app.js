@@ -12,7 +12,7 @@ app.use(express.json());
 
 app.use(require('./middleware/headers'))
 
-app.use('/user', user);
+app.use('/users', user);
 app.use('/food', food);
 app.use('/shopping', shopping);
 app.use(require('./middleware/validate-session'))

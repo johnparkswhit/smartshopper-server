@@ -6,7 +6,7 @@ var bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
 const validateSession = require('../middleware/validate-session');
 
-router.post('/create', function(req,res){
+router.post('/register', function(req,res){
     var username = req.body.username;
     var pass = req.body.password;
 
