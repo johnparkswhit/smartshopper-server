@@ -5,9 +5,10 @@ module.exports = function(req,res,next){
     if (req.method == 'OPTIONS') {
         next()
     } else {
-        var sessionToken = req.headers.authorization; 
+        var sessionToken = req.headers.authorization;
+        //var sessionToken = 'fake-token';        
         console.log(sessionToken) 
-        if (!sessionToken) return res.status(403).send({ auth: false, message: 'No token provided.'}); 
+        if (!sessionToken) return res.status(403).send({ auth: false, message: 'No token provided!!.'}); 
         else { 
             jwt.verify(sessionToken, process.env.JWT_SECRET, (err,decoded) => { 
                 if(decoded){
