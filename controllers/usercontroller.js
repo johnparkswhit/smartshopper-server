@@ -6,6 +6,7 @@ var bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
 const validateSession = require('../middleware/validate-session');
 
+//CREATE A USER
 router.post('/register', function(req,res){
     var username = req.body.username;
     var pass = req.body.password;
@@ -28,7 +29,7 @@ router.post('/register', function(req,res){
     )
 })
 
-//router.post('/login', function(req,res){
+//AUTHENTICATE A USER
 router.post('/authenticate', function(req,res){
     User.findOne({where:{username:req.body.username}}) 
     .then(
@@ -37,7 +38,6 @@ router.post('/authenticate', function(req,res){
                 bcrypt.compare(req.body.password, user.passwordhash, function (err, matches){
                     if (matches){
                         var token = jwt.sign({id:user.id}, process.env.JWT_SECRET, {expiresIn: 60*60*24});
-                        //var token = 'fake-token';
                         res.json({
                             user: user,
                             message: "successfully authenticated",
@@ -57,17 +57,49 @@ router.post('/authenticate', function(req,res){
     )
 })
 
-router.get('/getuser', validateSession, (req, res) => {
-    User.findAll({ 
-        // where: {
-        //     owner:req.user.id
-        // }, 
-        include: ['food', 'shopping']
+//GET ALL USERS
+router.get('/getall', validateSession, (req, res,) => {
+    User.findAll({
+        
     })
         .then(info => res.status(200).json(info))
         .catch(err => res.status(500).json(err))
 })
 
+//GET ONE USER BY ID
+router.get('/getuser/:id', (req, res) => {
+    User.findOne({ 
+        where: {
+            id: req.params.id
+        }, 
+    })
+        .then(info => res.status(200).json(info))
+        .catch(err => res.status(500).json(err))
+})
 
+//DELETE ONE USER BY ID
+router.delete('/delete/:id', validateSession, (req, res) => {
+    User.destroy({ 
+        where: {
+            id: req.params.id
+        }, 
+    })
+        .then(info => res.status(200).json(info))
+        .catch(err => res.status(500).json(err))
+})
+
+//UPDATE ONE USER BY ID
+router.put('/update/:id', validateSession, (req, res) => {
+    User.update({
+        username: req.body.username,
+        password: req.body.password
+    },     
+    {where: {
+        id: req.params.id
+        }, returning: true
+    })
+        .then(info => res.status(200).json(info))
+        .catch(err => res.status(500).json(err))
+})
 
 module.exports = router;
