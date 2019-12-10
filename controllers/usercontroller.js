@@ -69,5 +69,4 @@ router.get('/getuser', validateSession, (req, res) => {
 })
 
 
-
 module.exports = router;
