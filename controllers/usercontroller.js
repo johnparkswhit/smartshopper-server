@@ -10,10 +10,16 @@ const validateSession = require('../middleware/validate-session');
 router.post('/register', function(req,res){
     var username = req.body.username;
     var pass = req.body.password;
+    var firstName = req.body.firstName;
+    var lastName = req.body.lastName;
+    var adminStatus = req.body.adminStatus
 
     User.create({
         username: username,
-        passwordhash: bcrypt.hashSync(pass, 10) 
+        passwordhash: bcrypt.hashSync(pass, 10) ,
+        firstName: firstName,
+        lastName: lastName,
+        adminStatus: adminStatus
     }).then(
         function createSuccess(user){
             var token = jwt.sign({id:user.id}, process.env.JWT_SECRET, {expiresIn: 60*60*24});            

@@ -6,7 +6,7 @@ var sequelize = require('./db');
 var food = require('./controllers/foodcontroller');
 var shopping = require('./controllers/shoppingcontroller')
 
-sequelize.sync();
+sequelize.sync({force:true});
 
 app.use(express.json());
 
